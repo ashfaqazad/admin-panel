@@ -13,9 +13,10 @@ export default function Sidebar() {
 
   const menuItems = [
     { text: 'Dashboard', path: '/dashboard' },
+    { text: 'Product', path: '/dashboard/Product' },
     { text: 'Users', path: '/dashboard/users' },
+    { text: 'Orders', path: '/dashboard/orders' },
     { text: 'Settings', path: '/dashboard/settings' },
-    { text: 'ProductTable', path: '/dashboard/ProductTable' },
 
   ];
 

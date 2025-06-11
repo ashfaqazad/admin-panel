@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [name, setName] = useState('');
+  const [username, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,7 +16,7 @@ export default function RegisterPage() {
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
     const data = await res.json();
     if (data.success) {
@@ -37,7 +37,7 @@ export default function RegisterPage() {
             label="Name"
             fullWidth
             margin="normal"
-            value={name}
+            value={username}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -69,6 +69,21 @@ export default function RegisterPage() {
             </Button>
           </Box>
         </form>
+
+                {/* 👇 Login link below form */}
+                <Box mt={2} textAlign="center">
+                  <Typography variant="body2">
+                    Do you have an account?{' '}
+                    <Button
+                      variant="text"
+                      color="primary"
+                      onClick={() => router.push('/login')}
+                    >
+                      Login
+                    </Button>
+                  </Typography>
+                </Box>
+        
       </Box>
     </Container>
   );
