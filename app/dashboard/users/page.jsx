@@ -11,26 +11,23 @@ import {
   TableContainer,
   Paper,
 } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
-
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await fetch('/api/users');
         const data = await res.json();
-        console.log("Users from API:", data); // 👈 yeh log check karo
-
 
         if (Array.isArray(data)) {
-          // If user.role is missing, fallback to "User"
           const updatedUsers = data.map((user) => ({
             ...user,
             role: user.role || 'User',
           }));
-
           setUsers(updatedUsers);
         } else {
           console.error('Invalid response from server:', data);
@@ -43,29 +40,16 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const res = await fetch("/api/users");
-  //       const data = await res.json();
-  //       console.log("Users from API:", data); // 👈 confirm karo yahan kya aa raha
-  //       setUsers(data);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-  //   fetchUsers();
-  // }, []);
-
-
-
+  const handleRowClick = (email) => {
+    router.push(`/dashboard/users/${email}/orders`);
+  };
 
   return (
     <Box
       sx={{
         backgroundColor: '#0A192F',
         color: 'white',
-        width: '100%',
+        width: '800px',
         minHeight: '100vh',
         p: 4,
         borderRadius: 2,
@@ -79,45 +63,136 @@ export default function UsersPage() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Name</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Email</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Role</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Created At</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Name</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Role</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Created At</TableCell>
             </TableRow>
           </TableHead>
 
-          {/* <TableBody>
-            {users.map((user) => (
-              <TableRow key={user._id} hover>
-                <TableCell sx={{ color: 'white' }}>{user.username}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{user.email}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{user.role}</TableCell>
-                <TableCell sx={{ color: 'white' }}>
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody> */}
-
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id} hover>
-                <TableCell sx={{ color: 'white' }}>{user.name}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{user.email}</TableCell>
-                <TableCell sx={{ color: 'white' }}>{user.role}</TableCell>
-                <TableCell sx={{ color: 'white' }}>
+              <TableRow
+                key={user._id}
+                hover
+                onClick={() => handleRowClick(user.email)}
+                sx={{ cursor: 'pointer' }} // 👈 important
+              >
+                <TableCell sx={{ color: 'white', textAlign: 'center' }}>{user.name}</TableCell>
+                <TableCell sx={{ color: 'white', textAlign: 'center' }}>{user.email}</TableCell>
+                <TableCell sx={{ color: 'white', textAlign: 'center' }}>{user.role}</TableCell>
+                <TableCell sx={{ color: 'white', textAlign: 'center' }}>
                   {new Date(user.createdAt).toLocaleDateString()}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-
-
         </Table>
       </TableContainer>
     </Box>
   );
 }
+
+
+
+
+
+
+
+
+
+// 'use client';
+// import React, { useEffect, useState } from 'react';
+// import {
+//   Typography,
+//   Box,
+//   Table,
+//   TableHead,
+//   TableBody,
+//   TableRow,
+//   TableCell,
+//   TableContainer,
+//   Paper,
+// } from '@mui/material';
+
+// export default function UsersPage() {
+//   const [users, setUsers] = useState([]);
+
+
+//   useEffect(() => {
+//     const fetchUsers = async () => {
+//       try {
+//         const res = await fetch('/api/users');
+//         const data = await res.json();
+//         console.log("Users from API:", data); // 👈 yeh log check karo
+
+
+//         if (Array.isArray(data)) {
+//           // If user.role is missing, fallback to "User"
+//           const updatedUsers = data.map((user) => ({
+//             ...user,
+//             role: user.role || 'User',
+//           }));
+
+//           setUsers(updatedUsers);
+//         } else {
+//           console.error('Invalid response from server:', data);
+//         }
+//       } catch (err) {
+//         console.error('Failed to fetch users:', err);
+//       }
+//     };
+
+//     fetchUsers();
+//   }, []);
+
+
+//   return (
+//     <Box
+//       sx={{
+//         backgroundColor: '#0A192F',
+//         color: 'white',
+//         width: '100%',
+//         minHeight: '100vh',
+//         p: 4,
+//         borderRadius: 2,
+//       }}
+//     >
+//       <Typography variant="h5" fontWeight="bold" mt={4} mb={3}>
+//         👥 Users
+//       </Typography>
+
+//       <TableContainer component={Paper} sx={{ backgroundColor: '#0A192F' }}>
+//         <Table>
+//           <TableHead>
+//             <TableRow>
+//               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Name</TableCell>
+//               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Email</TableCell>
+//               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Role</TableCell>
+//               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Created At</TableCell>
+//             </TableRow>
+//           </TableHead>
+
+
+//           <TableBody>
+//             {users.map((user) => (
+//               <TableRow key={user.id} hover>
+//                 <TableCell sx={{ color: 'white' }}>{user.name}</TableCell>
+//                 <TableCell sx={{ color: 'white' }}>{user.email}</TableCell>
+//                 <TableCell sx={{ color: 'white' }}>{user.role}</TableCell>
+//                 <TableCell sx={{ color: 'white' }}>
+//                   {new Date(user.createdAt).toLocaleDateString()}
+//                 </TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+
+
+//         </Table>
+//       </TableContainer>
+//     </Box>
+//   );
+// }
 
 
 

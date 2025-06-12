@@ -34,7 +34,7 @@ export default function Product() {
                 backgroundColor: '#0A192F', // Dark blue
                 color: 'white',
                 minHeight: '100vh',
-                width: "600px",
+                width: "700px",
                 p: 4,
                 borderRadius: 2,
             }}
@@ -74,7 +74,7 @@ export default function Product() {
                                 <TableRow key={p._id} hover>
                                     <TableCell sx={{ color: 'white' }}>{p.title}</TableCell>
                                     <TableCell sx={{ color: 'white' }}>${p.price}</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>{p.description}</TableCell>
+                                    <TableCell sx={{ color: 'white', textAlign: 'center' }}>{p.description}</TableCell>
                                 </TableRow>
                             );
                         })}
