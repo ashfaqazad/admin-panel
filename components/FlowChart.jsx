@@ -1,25 +1,32 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Paper, Typography } from '@mui/material';
 
-const data = [
-  { name: 'Mon', value: 3000 },
-  { name: 'Tue', value: 4500 },
-  { name: 'Wed', value: 4000 },
-  { name: 'Thu', value: 5000 },
-  { name: 'Fri', value: 4700 },
-  { name: 'Sat', value: 6000 },
-  { name: 'Sun', value: 5300 },
-];
+export default function FlowChart() {
+  const [data, setData] = useState([]);
 
-export default function WeeklyRecapChart() {
+  useEffect(() => {
+    const fetchWeeklyRevenue = async () => {
+      try {
+        const res = await fetch('/api/admin/weekly-revenue');
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("Failed to fetch weekly revenue data:", err);
+      }
+    };
+
+    fetchWeeklyRevenue();
+  }, []);
+
   return (
     <Paper sx={{ p: 2, mt: 4, background: '#1e1e2f', borderRadius: 3 }}>
       <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
         Weekly Recap
       </Typography>
-      <ResponsiveContainer width={700} height={300}>
+      <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -43,6 +50,70 @@ export default function WeeklyRecapChart() {
     </Paper>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 'use client';
+
+// import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+// import { Paper, Typography } from '@mui/material';
+
+// const data = [
+//   { name: 'Mon', value: 3000 },
+//   { name: 'Tue', value: 4500 },
+//   { name: 'Wed', value: 4000 },
+//   { name: 'Thu', value: 5000 },
+//   { name: 'Fri', value: 4700 },
+//   { name: 'Sat', value: 6000 },
+//   { name: 'Sun', value: 5300 },
+// ];
+
+// export default function WeeklyRecapChart() {
+//   return (
+//     <Paper sx={{ p: 2, mt: 4, background: '#1e1e2f', borderRadius: 3 }}>
+//       <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
+//         Weekly Recap
+//       </Typography>
+//       <ResponsiveContainer width={700} height={300}>
+//         <AreaChart data={data}>
+//           <defs>
+//             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+//               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+//               <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+//             </linearGradient>
+//           </defs>
+//           <XAxis dataKey="name" stroke="#ccc" />
+//           <YAxis stroke="#ccc" />
+//           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+//           <Tooltip />
+//           <Area
+//             type="monotone"
+//             dataKey="value"
+//             stroke="#8884d8"
+//             fillOpacity={1}
+//             fill="url(#colorValue)"
+//           />
+//         </AreaChart>
+//       </ResponsiveContainer>
+//     </Paper>
+//   );
+// }
 
 
 

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Typography, Grid, Card, CardContent } from '@mui/material';
+import FlowChart from '@/components/FlowChart'; // ✅ Correct import path
+
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -11,19 +13,29 @@ const Dashboard = () => {
     totalRevenue: 0,
   });
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch('/api/dashboard-stats');
-        const data = await res.json();
-        setStats(data);
-      } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
-      }
-    };
 
-    fetchStats();
-  }, []);
+  useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const res = await fetch('/api/dashboard-stats');
+      const data = await res.json();
+      setStats(data);
+    } catch (err) {
+      console.error('Failed to fetch dashboard stats:', err);
+    }
+  };
+
+  fetchStats();
+}, []);
+
+useEffect(() => {
+  fetch('/api/admin/revenue')
+    .then(res => res.json())
+    .then(data =>
+      setStats(prev => ({ ...prev, totalRevenue: data.revenue }))
+    );
+}, []);
+
 
   return (
     <div>
@@ -34,7 +46,7 @@ const Dashboard = () => {
           <Card sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
             <CardContent>
               <Typography variant="h6">👥 Users</Typography>
-              <Typography variant="h4">{stats.userCount}</Typography>
+              <Typography variant="h4" sx={{ textAlign: "center" }}>{stats.userCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -43,7 +55,7 @@ const Dashboard = () => {
           <Card sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
             <CardContent>
               <Typography variant="h6">📦 Products</Typography>
-              <Typography variant="h4">{stats.productCount}</Typography>
+              <Typography variant="h4" sx={{ textAlign: "center" }}>{stats.productCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -52,7 +64,7 @@ const Dashboard = () => {
           <Card sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
             <CardContent>
               <Typography variant="h6">📑 Orders</Typography>
-              <Typography variant="h4">{stats.orderCount}</Typography>
+              <Typography variant="h4" sx={{ textAlign: "center" }}>{stats.orderCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -61,13 +73,15 @@ const Dashboard = () => {
           <Card sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
             <CardContent>
               <Typography variant="h6">💰 Revenue</Typography>
-              <Typography variant="h4">${stats.totalRevenue.toLocaleString()}</Typography>
+              <Typography variant="h4" sx={{ textAlign: "center" }}>${stats.totalRevenue.toLocaleString()}</Typography>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
       {/* Weekly Recap Chart remains same here, optional dynamic later */}
+          <FlowChart /> {/* Chart at bottom */}
+
     </div>
   );
 };
